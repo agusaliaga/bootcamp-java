@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/jdbc 
+    http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+	<context:annotation-config />
+	<context:component-scan base-package="com.globant.bootcamp.java.weatherapplication.test"></context:component-scan>
+	
+	<!-- DB connection -->
+	<bean id="DBConnection"
+		class="com.globant.bootcamp.java.weatherapplication.connection.DBConnection">
+		<property name="driver" value="org.h2.jdbcx.JdbcDataSource" />
+		<property name="url" value="jdbc:h2:mem:testdb;database_to_upper=false;DB_CLOSE_DELAY=20;MODE=MYSQL" />
+		<property name="user" value="sa" />
+		<property name="password" value="" />
+	</bean>
+	
+	
+	<jdbc:embedded-database id="dataSource" type="H2">
+        <jdbc:script location="classpath:weatherdb.sql"/>
+        <jdbc:script location="classpath:insert-data.sql"/>
+    </jdbc:embedded-database>
+	
+	
+	 <bean id="winddao" class="com.globant.bootcamp.java.weatherapplication.db.WindDAO"/>
+	 <bean id="atmdao" class="com.globant.bootcamp.java.weatherapplication.db.AtmosphereDAO"/>
+	 <bean id="countrydao" class="com.globant.bootcamp.java.weatherapplication.db.CountryDAO"/>
+	 <bean id="weatherdao" class="com.globant.bootcamp.java.weatherapplication.db.WeatherDAO"/>
+	 <bean id="statedao" class="com.globant.bootcamp.java.weatherapplication.db.StateDAO"/>
+	 <bean id="towndao" class="com.globant.bootcamp.java.weatherapplication.db.TownDAO"/>
+	 <bean id="weatherdescriptiondao" class="com.globant.bootcamp.java.weatherapplication.db.WeatherDescriptionDAO"/>
+	 <bean id="dbmanager" class="com.globant.bootcamp.java.weatherapplication.db.DBManager" />
+	
+	<bean id="weatheradapter" class="com.globant.bootcamp.java.weatherapplication.adapters.YahooAPIWeatherAdapter">
+	</bean>
+	<bean id="countryadapter" class="com.globant.bootcamp.java.weatherapplication.adapters.CountryAPIAdapter">
+	</bean>
+	<bean id="stateadapter" class="com.globant.bootcamp.java.weatherapplication.adapters.StateAPIAdapter">
+	</bean>
+	<bean id="countryproxy"	class="com.globant.bootcamp.java.weatherapplication.proxies.CountryProxy">
+	</bean>
+	<bean id="stateproxy" class="com.globant.bootcamp.java.weatherapplication.proxies.StateProxy">
+	</bean>
+	<bean id="weatherproxy"	class="com.globant.bootcamp.java.weatherapplication.proxies.WeatherProxy">
+	</bean>
+	
+    
+    
+  
+  
+    
+	
+</beans>

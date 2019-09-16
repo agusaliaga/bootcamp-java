@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:jaxrs-client="http://cxf.apache.org/jaxrs-client"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd​
+        http://cxf.apache.org/jaxrs 
+		http://cxf.apache.org/schemas/jaxrs.xsd 
+		http://cxf.apache.org/jaxws 
+		http://cxf.apache.org/schemas/jaxws.xsd
+        http://cxf.apache.org/jaxrs-client 
+		http://cxf.apache.org/schemas/jaxrs-client.xsd">
+
+	<context:component-scan base-package="com.globant.bootcamp.java.weatherapplication"
+		use-default-filters="false">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	<mvc:annotation-driven />
+	<mvc:view-controller path="/index.jsp" />
+
+	<bean id="DBConnection"
+		class="com.globant.bootcamp.java.weatherapplication.connection.DBConnection">
+		<property name="driver" value="com.mysql.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/weatherdb?useSSL=false" />
+		<property name="user" value="root" />
+		<property name="password" value="agustina" />
+	</bean>
+
+
+	<bean id="winddao" 
+		class="com.globant.bootcamp.java.weatherapplication.db.WindDAO" />
+	<bean id="atmdao"
+		class="com.globant.bootcamp.java.weatherapplication.db.AtmosphereDAO" />
+	<bean id="countrydao"
+		class="com.globant.bootcamp.java.weatherapplication.db.CountryDAO" />
+	<bean id="weatherdao"
+		class="com.globant.bootcamp.java.weatherapplication.db.WeatherDAO" />
+	<bean id="statedao"
+		class="com.globant.bootcamp.java.weatherapplication.db.StateDAO" />
+	<bean id="towndao" class="com.globant.bootcamp.java.weatherapplication.db.TownDAO" />
+	<bean id="weatherdescriptiondao"
+		class="com.globant.bootcamp.java.weatherapplication.db.WeatherDescriptionDAO" />
+	<bean id="dbmanager"
+		class="com.globant.bootcamp.java.weatherapplication.db.DBManager" />
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/WEB-INF/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+
+	<jaxrs-client:client id="RestYahooClient"
+	name="RestYahooClient"
+		serviceClass="com.globant.bootcamp.java.weatherapplication.services.RestYahooClient"
+		address="https://query.yahooapis.com"
+		inheritHeaders="true">
+		<jaxrs-client:headers>
+			<entry key="Accept" value="application/json" />
+		</jaxrs-client:headers>
+	</jaxrs-client:client>
+	
+	<jaxrs-client:client id="RestStatesClient"
+	name="RestStatesClient"
+		serviceClass="com.globant.bootcamp.java.weatherapplication.services.RestStatesClient"
+		address="http://services.groupkt.com/state"
+		inheritHeaders="true">
+		<jaxrs-client:headers>
+			<entry key="Accept" value="application/json" />
+		</jaxrs-client:headers>
+	</jaxrs-client:client>
+	
+	<jaxrs-client:client id="RestCountriesClient"
+	name="RestCountriesClient"
+		serviceClass="com.globant.bootcamp.java.weatherapplication.services.RestCountriesClient"
+		address="http://services.groupkt.com/country"
+		inheritHeaders="true">
+		<jaxrs-client:headers>
+			<entry key="Accept" value="application/json" />
+		</jaxrs-client:headers>
+	</jaxrs-client:client>
+	
+
+	<bean id="weatheradapter"
+		class="com.globant.bootcamp.java.weatherapplication.adapters.YahooAPIWeatherAdapter">
+	</bean>
+	<bean id="countryadapter"
+		class="com.globant.bootcamp.java.weatherapplication.adapters.CountryAPIAdapter">
+	</bean>
+	<bean id="stateadapter"
+		class="com.globant.bootcamp.java.weatherapplication.adapters.StateAPIAdapter">
+	</bean>
+	<bean id="countryproxy"
+		class="com.globant.bootcamp.java.weatherapplication.proxies.CountryProxy">
+	</bean>
+	<bean id="stateproxy"
+		class="com.globant.bootcamp.java.weatherapplication.proxies.StateProxy">
+	</bean>
+	<bean id="weatherproxy"
+		class="com.globant.bootcamp.java.weatherapplication.proxies.WeatherProxy">
+	</bean>
+
+</beans>
